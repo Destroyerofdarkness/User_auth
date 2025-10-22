@@ -9,7 +9,9 @@ const mongoose = require("mongoose")
 const userRouter = require("./router/userRouts")
 
 mongoose.connect("mongodb://localhost:27017/", {dbName: "node_auth"})
-    .then((result) => app.listen(3000))
+    .then((result) => app.listen(25565, '0.0.0.0', ()=>{
+        console.log(`Server running at http://${require('os').hostname}:3000`)
+    }))
     .catch((err)=>console.log(err))
 
 
