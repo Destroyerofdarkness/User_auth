@@ -6,9 +6,13 @@ const app =  express()
 
 const ejs = require("ejs")
 
+const path = require("path")
+
 const mongoose = require("mongoose")
 
 const userRouter = require("./router/userRouts")
+
+app.use(express.static(path.join(__dirname, "handlers")))
 
 mongoose.connect("mongodb://localhost:27017/", {dbName: "node_auth"})
     .then((result) => app.listen(25565, '0.0.0.0', ()=>{

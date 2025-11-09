@@ -1,7 +1,7 @@
 
 const User = require("../models/User.js")
 const argon2 = require("argon2")
-
+const jwt = require("jsonwebtoken")
 
 const handleErrors = (err) =>{
 console.log(err.message, err.code)
@@ -13,13 +13,22 @@ error.user = 'This username is already in use'
 return error
 }
 
-
-
 Object.values(err.errors).forEach( ({properties}) =>{
     error[properties.path] = properties.message
 })
 return error
 }
+
+
+
+
+const maxValidDate = 3 * 24 * 60 * 60
+const createToken = (id)=>{
+ return jwt.sign({id}, "secret", {
+    expiresIn: maxValidDate
+ })
+}
+
 
 const user_login = (req,res) =>{
     res.render("index")
@@ -47,7 +56,8 @@ const user_signup = (req,res) =>{
 }
 
 const user_signup_post = async (req,res)=>{
-    const {user,pass, conPass} = req.body
+    try{
+    const {user ,pass, conPass} = req.body
     console.log(user, pass, conPass)
     if(pass === conPass){
     const hashPass = await argon2.hash(pass)
@@ -56,16 +66,14 @@ const user_signup_post = async (req,res)=>{
         passwd: hashPass
     })
     await newUser.save()
-    .then((result)=> {
-        res.status(201).json(result)
-        res.redirect("/login")
-        
-    })
-    .catch((err)=>{
+    
+    const token = createToken(newUser.id)
+    res.cookie("jwt", token, {httpOnly: true, maxAge: maxValidDate*1000})
+    res.status(201).json({newUser})
+    }
+    }catch(err){
         const errors = handleErrors(err)
-        console.log(errors)
-        res.status(400).json({errors})
-    })}
+       res.status(400).json({errors})}
 
 
 } 
