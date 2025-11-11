@@ -60,10 +60,9 @@ const user_signup_post = async (req,res)=>{
     const {user ,pass, conPass} = req.body
     console.log(user, pass, conPass)
     if(pass === conPass){
-    const hashPass = await argon2.hash(pass)
     const newUser = new User({
         user:user,
-        passwd: hashPass
+        passwd: pass
     })
     await newUser.save()
     
