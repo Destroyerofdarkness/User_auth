@@ -25,9 +25,22 @@ userSchema.pre("save", async function(next){
     }catch(err){
         next(err)
     }
- 
 })
 
-const user = model("Users", userSchema)
+userSchema.statics.login = async function(user, passwd){
+    const rUser = await userS.findOne({user})
+    if(rUser){
+        console.log("User found, verifying password")
+        const auth = await argon2.verify(rUser.passwd, passwd)
+        if(auth){
+            console.log("Password verified")
+            return rUser
+        }
+        throw Error("Password doesn't match")
+    }
+    throw Error("The user doesn't exist")
+}
 
-module.exports = user
+const userS = model("Users", userSchema)
+
+module.exports = userS

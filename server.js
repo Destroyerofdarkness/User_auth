@@ -12,11 +12,11 @@ const mongoose = require("mongoose")
 
 const userRouter = require("./router/userRouts")
 
-app.use(express.static(path.join(__dirname, "handlers")))
+app.use(express.static(path.join(__dirname, "public")))
 
 mongoose.connect("mongodb://localhost:27017/", {dbName: "node_auth"})
     .then((result) => app.listen(25565, '0.0.0.0', ()=>{
-        console.log(`Server running at http://${require('os').hostname}:3000`)
+        console.log(`Server running at http://${require('os').hostname()}:25565`)
     }))
     .catch((err)=>console.log(err))
 
