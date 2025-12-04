@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", (e)=>{
         const user = form.user.value
         const passwd = form.passwd.value
         try{
-            const res = await fetch("/login",{
+            const res = await fetch("/",{
                 method: "POST",
                 body: JSON.stringify({user, passwd}),
                  headers: { "Content-Type": "application/json" }
@@ -19,14 +19,14 @@ document.addEventListener("DOMContentLoaded", (e)=>{
         const data = await res.json()
         console.log(data)
         if(data.user){
-            location.assign("/")
+            location.assign("/random-page")
         }
         if(data.errors){
             userError.textContent = data.errors.user
             passError.textContent = data.errors.passwd
         }
         }catch(err){
-            console.error(err)
+            console.log(err)
         }
 
 
