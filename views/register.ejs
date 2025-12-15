@@ -48,6 +48,9 @@ const res = await fetch("signup", {
       userError.textContent = data.errors.user;
       passError.textContent = data.errors.passwd;
     }
+    if(data.newUser){
+      window.location.href = "/login"
+    }
   } catch (err) {
     console.log(err);
   }

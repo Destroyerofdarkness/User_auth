@@ -71,7 +71,7 @@ const user_signup_post = async (req,res)=>{
     res.status(201).json({newUser})
     }
     }catch(err){
-        const errors = handleErrors(err)
+    const errors = handleErrors(err)
        res.status(400).json({errors})}
 
 
